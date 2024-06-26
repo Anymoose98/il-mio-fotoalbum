@@ -16,12 +16,13 @@ datasource db {
 // Una foto contiene almeno le seguenti informazioni :
 // titolo, descrizione, immagine (upload), visibile, categorie
 // Categorie può avere più Foto e una foto può avere più categorie 
+// User è l'unico che può modificare i file
 
-model Foto {
+model Photo {
   id          Int        @id @default(autoincrement())
   title       String
   description String
-  visible     Boolean
+  visible     Boolean    @default(true)
   img_path    String
   categories  Category[]
   createdAt   DateTime   @default(now())
@@ -31,7 +32,7 @@ model Foto {
 model Category {
   id        Int      @id @default(autoincrement())
   name      String
-  fotos     Foto[]
+  photos    Photo[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
