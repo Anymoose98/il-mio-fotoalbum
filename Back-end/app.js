@@ -3,6 +3,8 @@ const app = express();
 require("dotenv").config();
 const port = process.env.PORT || 3000; 
 const photoRouter = require("./Router/photoRouter.js")
+const categoryRouter = require("./Router/categoryRouter.js")
+
 
 app.use(express.json());
 
@@ -15,6 +17,7 @@ app.get('/', (req, res) => {
 app.use('/photo', photoRouter)
 
 // Route per Crud Category
+app.use('/category', categoryRouter)
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
