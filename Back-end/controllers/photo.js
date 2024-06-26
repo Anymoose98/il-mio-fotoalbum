@@ -1,25 +1,37 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const { validationResult } = require('express-validator');
+const deletePic = require("../utils/deletePic");
 
-// Creare nuovo contenuto
+// Crea
 const create = async (req, res) => {
-    const { title, description, visible, img_path, categories } = req.body;
-
-    const data = {
-        title,
-        description,
-        img_path,
-        categories: {
-            connect: categories ? categories.map(id => ({ id })) : []
-        },
-        visible: visible !== undefined ? visible : true
-    };
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
 
     try {
+        const { title, description, categories } = req.body;
+        const img_path = req.file.path;
+
+        const data = {
+            title,
+            description,
+            img_path,
+            categories: {
+                connect: categories ? categories.map(id => ({ id: parseInt(id) })) : []
+            },
+            visible: true
+        };
+
         const photo = await prisma.photo.create({ data });
         res.status(200).json({ message: 'Foto creata con successo', photo });
     } catch (err) {
         console.error(err);
+        
+        if (req.file) {
+            deletePic('public/', req.file.filename);
+        }
         res.status(500).json({ error: "Qualcosa è andato storto" });
     }
 };
@@ -70,37 +82,41 @@ const show = async (req, res) => {
             }
         });
         if (photo) {
-            res.json(photo)
-        }
-        else {
-            throw new RestError(`Foto richiesta non trovata`, 404);
+            res.json(photo);
+        } else {
+            throw new Error(`Foto richiesta non trovata`);
         }
     } catch (err) {
-        // Per capire se entra nello show
+        console.error(err);
         res.status(500).json({ error: "Qualcosa è andato storto show" });
     }
 };
 
+// Aggiornamento
 const update = async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, description, visible, img_path, categories } = req.body;
+        const { title, description, visible, categories } = req.body;
 
-        const data = {
+        let data = {
             title,
             description,
-            img_path,
+            visible: visible !== undefined ? visible : true,
             categories: {
-                connect: categories ? categories.map(id => ({ id })) : []
-            },
-            visible: visible !== undefined ? visible : true
+                connect: categories ? categories.map(id => ({ id: parseInt(id) })) : []
+            }
         };
 
-        // Gestione dei tags (supponendo intendessi categories)
-        if (categories) {
-            data.categories = {
-                connect: categories.map(id => ({ id }))
-            };
+        // Gestione dell'immagine se presente
+        if (req.file) {
+            const img_path = req.file.path;
+            data.img_path = img_path;
+
+            // Trova la foto esistente per eliminare l'immagine precedente
+            const existingPhoto = await prisma.photo.findUnique({ where: { id: parseInt(id) } });
+            if (existingPhoto && existingPhoto.img_path) {
+                deletePic('public/', existingPhoto.img_path);
+            }
         }
 
         const photo = await prisma.photo.update({
@@ -115,6 +131,7 @@ const update = async (req, res) => {
     }
 };
 
+// Elimina
 const destroy = async (req, res) => {
     try {
         const { id } = req.params;
@@ -122,6 +139,10 @@ const destroy = async (req, res) => {
             where: { id: parseInt(id) }
         });
         if (photo) {
+            // Elimina l'immagine dal file system
+            if (photo.img_path) {
+                deletePic('public/', photo.img_path);
+            }
             await prisma.photo.delete({
                 where: { id: parseInt(id) }
             });
@@ -130,9 +151,9 @@ const destroy = async (req, res) => {
             res.status(404).json({ message: "Foto non trovata" });
         }
     } catch (err) {
-        console.error("Errore nello destroy:", err);
+        console.error("Errore nel destroy:", err);
         res.status(500).json({ error: "Qualcosa è andato storto durante l'eliminazione della foto" });
     }
 };
 
-module.exports = { index, create, show, update, destroy }
+module.exports = { index, create, show, update, destroy };

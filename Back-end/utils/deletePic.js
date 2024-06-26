@@ -1,12 +1,12 @@
 const path = require('path');
 const fs = require('fs');
 
-module.exports = (picFolder, filename) => {
-    try{
-        const filePath = path.join(__dirname, `../public/${picFolder}/` + filename);
+module.exports = (folderPath, filename) => {
+    try {
+        const filePath = path.join(__dirname, `../${folderPath}/${filename}`);
         fs.unlinkSync(filePath);
+        console.log(`File ${filename} eliminato con successo.`);
+    } catch (err) {
+        console.error(`Errore durante l'eliminazione del file ${filename}:`, err);
     }
-    catch(err){
-        console.log(`Non sono riuscito ad eliminare la profile pic ${filename}.`);
-    }
-}
+};
