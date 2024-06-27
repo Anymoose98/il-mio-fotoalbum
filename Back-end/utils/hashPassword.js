@@ -1,17 +1,15 @@
-const bcrypt = require("bcrypt");
-require("dotenv").config();
+const bcrypt = require('bcrypt');
+const SALT_ROUNDS = 10;
 
-const hashPassword = async (password) => {
-    const hashPassword = await bcrypt.hash(password + process.env.PEPPER_KEY, 10);
-    return hashPassword;
+async function hashPassword(password) {
+    return await bcrypt.hash(password, SALT_ROUNDS);
 }
 
-const comparePassword = async (password, hashPassword) => {
-    const isPasswordValid = await bcrypt.compare(password + process.env.PEPPER_KEY, hashPassword);
-    return isPasswordValid;
+async function comparePassword(plainPassword, hashedPassword) {
+    return await bcrypt.compare(plainPassword, hashedPassword);
 }
 
 module.exports = {
     hashPassword,
     comparePassword
-}
+};

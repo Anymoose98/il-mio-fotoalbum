@@ -10,7 +10,7 @@ require("dotenv").config();
 app.use(express.json());
 
 // Route per le operazioni di autenticazione
-app.use('', authRouter);
+app.use('/identificazione', authRouter);
 
 // Route Home
 app.get('/', (req, res) => {

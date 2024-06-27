@@ -84,7 +84,7 @@ const show = async (req, res) => {
         if (photo) {
             res.json(photo);
         } else {
-            throw new Error(`Foto richiesta non trovata`);
+            res.status(404).json({ error: "Foto non trovata" });
         }
     } catch (err) {
         console.error(err);
