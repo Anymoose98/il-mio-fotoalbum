@@ -1,4 +1,5 @@
 import headerStyles from "./Header.module.scss"
+import { Link } from "react-router-dom";
 
 const Header = () => {
     return (
@@ -12,8 +13,8 @@ const Header = () => {
                         <h1 className="text-center p-2">Il mio foto album</h1>
                     </div>
                     <div className="col-4 text-end">
-                        <button><a href="http://localhost:3000/">Login</a></button>
-                        <button><a href="http://localhost:3000/">Register</a></button>
+                        <button><Link to={`http://localhost:5173/login`}>Login</Link></button>
+                        {/* <button><a href="http://localhost:3000/">Register</a></button> */}
                     </div>
                 </div>
             </div>
