@@ -26,18 +26,17 @@ const bodyData = {
     },
     categories: {
         in: ["body"],
+        customSanitizer: {
+            options: (value) => { 
+                    return value.map(elm => Number(elm)) 
+                } 
+            },
         isArray: {
             options: { min: 1 },
             errorMessage: "Una categoria è obbligatoria"
         }
     },
-    img_path:{
-        in:["body"],
-        notEmpty:{
-            bail: true,
-            errorMessage:"La foto è obbligatoria"
-        }
-    }
+
 
 }
 

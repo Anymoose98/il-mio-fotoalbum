@@ -6,9 +6,12 @@ const categoryRouter = require("./Router/categoryRouter.js")
 const authRouter = require("./Router/auth.js")
 const cors = require("cors");
 require("dotenv").config();
+const path = require('path')
+
 
 app.use(cors());
 app.use(express.json());
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // Route per le operazioni di autenticazione
 app.use('/identificazione', authRouter);

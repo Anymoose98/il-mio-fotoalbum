@@ -29,11 +29,10 @@ const Create = () => {
         formData.append('title', title);
         formData.append('description', description);
         formData.append('visible', visible);
+        formData.append('categories[]',selectedCategory);
         formData.append('image', imgFile);
-        formData.append('categories', selectedCategory);
         
         try {
-            console.log(imgFile)
             const res = await axios.post('http://localhost:3000/photo', formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",

@@ -8,7 +8,7 @@ import HomePage from './assets/components/pages/homepage/HomePage';
 import Login from './assets/components/pages/login/Login';
 import PrivatePage from './assets/components/middlewares/PrivatePage';
 import Create from './assets/components/pages/Create/Create';
-// import Show from './assets/components/pages/show/Show'
+import Show from './assets/components/pages/show/Show';
 
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
         <AuthProvider>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            {/* <Route path="/:id" element={<Show />} /> */}
+            <Route path="/:id" element={<Show />} />
             <Route path="/login" element={<Login />} />
 
             <Route path="/create" element={

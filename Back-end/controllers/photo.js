@@ -2,24 +2,24 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const { validationResult } = require('express-validator');
 const deletePic = require("../utils/deletePic");
+const path = require("path")
 
 // Crea
 const create = async (req, res) => {
-    // Gestione dell'upload dell'immagine
-    const imgFile = req.file; 
-    const img_path = `/public/${imgFile.name}`;
+
 
     const { title, description, categories } = req.body;
 
     try {
+        // Gestione dell'upload dell'immagine
+        const imgFile = req.file;
 
-        const imagePath = path.join(__dirname, '..', 'public', imgFile.filename);
-        fs.writeFileSync(imagePath, imgFile.buffer); 
+        const imagePath = path.join('public/', imgFile.filename);
 
         const data = {
             title,
             description,
-            img_path,
+            img_path: imagePath,
             categories: {
                 connect: categories ? categories.map(id => ({ id: parseInt(id) })) : []
             },
