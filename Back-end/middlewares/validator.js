@@ -8,7 +8,7 @@ module.exports = (schema) => {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 if (req.file) {
-                    const picFolder = req.url.includes('auth') ? 'profile_pics' : 'pizza_pics';
+                    const picFolder = req.url.includes('auth') ? 'profile_pics' : 'public';
                     deletePic(picFolder, req.file.filename);
                 }
                 return res.status(400).json({ errors: errors.array() });

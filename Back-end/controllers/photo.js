@@ -5,14 +5,16 @@ const deletePic = require("../utils/deletePic");
 
 // Crea
 const create = async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
+    // Gestione dell'upload dell'immagine
+    const imgFile = req.file; 
+    const img_path = `/public/${imgFile.name}`;
+
+    const { title, description, categories } = req.body;
 
     try {
-        const { title, description, categories } = req.body;
-        const img_path = req.file.path;
+
+        const imagePath = path.join(__dirname, '..', 'public', imgFile.filename);
+        fs.writeFileSync(imagePath, imgFile.buffer); 
 
         const data = {
             title,
@@ -25,14 +27,11 @@ const create = async (req, res) => {
         };
 
         const photo = await prisma.photo.create({ data });
+
         res.status(200).json({ message: 'Foto creata con successo', photo });
     } catch (err) {
         console.error(err);
-        
-        if (req.file) {
-            deletePic('public/', req.file.filename);
-        }
-        res.status(500).json({ error: "Qualcosa è andato storto" });
+        res.status(500).json({ error: "Errore durante la creazione della foto" });
     }
 };
 

@@ -30,7 +30,15 @@ const bodyData = {
             options: { min: 1 },
             errorMessage: "Una categoria è obbligatoria"
         }
+    },
+    img_path:{
+        in:["body"],
+        notEmpty:{
+            bail: true,
+            errorMessage:"La foto è obbligatoria"
+        }
     }
+
 }
 
 module.exports =  bodyData;

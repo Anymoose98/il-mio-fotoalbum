@@ -10,7 +10,7 @@ const upload = require('../middlewares/upload')
 router.get('/', index);
 router.get('/:id', show);
 
-router.use(verifyToken);
+// router.use(verifyToken);
 
 
 router.post('/', upload.single('image'), validator(bodyData), create);
