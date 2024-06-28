@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 const Show = () => {
     const { id } = useParams();
@@ -32,6 +32,11 @@ const Show = () => {
                             <img src={`http://localhost:3000/${photo.img_path}`} alt={photo.title} />
                         </figure>
                         <p>{photo.description}</p>
+                    </div>
+                    <div className="col-12 text-center">
+                        <button>
+                            <Link to={`/delete/${photo.id}`}>Elimina</Link>
+                        </button>
                     </div>
                 </div>
             </div>

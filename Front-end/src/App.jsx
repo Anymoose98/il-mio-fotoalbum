@@ -9,6 +9,7 @@ import Login from './assets/components/pages/login/Login';
 import PrivatePage from './assets/components/middlewares/PrivatePage';
 import Create from './assets/components/pages/Create/Create';
 import Show from './assets/components/pages/show/Show';
+import Delete from './assets/components/pages/delete/Delete';
 
 
 function App() {
@@ -27,6 +28,9 @@ function App() {
               <PrivatePage><Create /></PrivatePage>
             } />
 
+            <Route path="/delete/:id" element={
+              <PrivatePage><Delete /></PrivatePage>
+            } />
           </Routes>
         </AuthProvider>
         <Footer />

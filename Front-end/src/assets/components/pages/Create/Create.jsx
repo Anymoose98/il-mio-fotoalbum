@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Create = () => {
     const [title, setTitle] = useState('');
@@ -8,6 +9,8 @@ const Create = () => {
     const [imgFile, setImgFile] = useState(null);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('');
+
+    const navigate = useNavigate();
 
     useEffect(() => {
 
@@ -40,6 +43,7 @@ const Create = () => {
             });
 
             console.log('Risposta dal server:', res.data);
+            navigate('/')
         } catch (error) {
             console.error("Errore durante l'aggiunta della foto:", error);
         }

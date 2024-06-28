@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import { useAuth } from "../../contexts/AuthContext";
 import LoginPageStyles from "./Login.module.scss";
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const { login } = useAuth();
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [loginError, setLoginError] = useState(false);
 
+    const navigate = useNavigate();
+
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
             await login(formData); 
+            navigate('/create')
         } catch (error) {
             console.error('Errore durante il login:', error);
             setLoginError(true); 

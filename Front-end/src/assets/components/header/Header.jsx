@@ -14,7 +14,6 @@ const Header = () => {
                     </div>
                     <div className="col-4 text-end">
                         <button><Link to={`http://localhost:5173/login`}>Login</Link></button>
-                        {/* <button><a href="http://localhost:3000/">Register</a></button> */}
                     </div>
                 </div>
             </div>
